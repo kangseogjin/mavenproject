@@ -1556,7 +1556,6 @@ html, h1, h2, h3, h4, h5, h6, form, fieldset, img {
 
 /* 텍스트 필드 css */      
     
-   
 .css-gflgma {
     position: absolute;
     inset: 44px 0px 0px;
@@ -1570,7 +1569,6 @@ html, h1, h2, h3, h4, h5, h6, form, fieldset, img {
     overflow-y: auto;
     display:none;
 }
-
 
 
 
@@ -1685,11 +1683,128 @@ button {
 }
 
 
-
 /* 텍스트 필드 css */  
 img {
     overflow-clip-margin: content-box;
     overflow: clip;
+}
+
+/* 연관 검색어 css */  
+.css-6iux0g {
+    display: flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 2px 16px;
+    background-color: rgb(255, 255, 255);
+}
+
+/* 연관검색어 목록 css */      
+.css-gflgma1 {
+    position: absolute;
+    inset: 44px 0px 0px;
+    /* z-index: 2; */
+    height: auto;
+    padding-top: 16px;
+    padding-bottom: 150px;
+    height: 700px;
+    border: 1px solid rgb(189, 189, 189);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 4px 0px;
+    overflow-y: auto;
+    display:none;
+}
+
+
+/* 연관검색어 목록 css */      
+.css-gflgma1.active {
+    display: block; /* 클릭 시 나타남 */
+}
+
+/* 연관 검색어 css */  
+.css-ryc40a {
+    width: 26px;
+    height: 26px;
+    margin-top: 17px;
+    border-radius: 8px;
+    border: 1px solid rgb(228, 230, 231);
+}
+
+/* 연관 검색어 css */ 
+.css-13gn9e4 {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+    width: calc(100% - 40px);
+}
+
+/* 연관 검색어 css */ 
+.css-1iet6e5 {
+    font-size: 14px;
+    letter-spacing: -0.25px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 연관 검색어 css */ 
+.css-1kn92c3 {
+    font-size: 12px;
+    letter-spacing: -0.56px;
+    line-height: 1.5;
+    color: rgb(150, 155, 158);
+}
+
+/* 연관 검색어 css */ 
+.css-pkdumz {
+    height: 1px;
+    margin: 10px 0px;
+    background-color: rgb(228, 230, 231);
+}
+
+/* 연관 검색어 css */ 
+.css-1chdash {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 7px 16px;
+    background-color: rgb(255, 255, 255);
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+/* 연관 검색어 css */ 
+.css-ryc40a {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 1px solid rgb(228, 230, 231);
+}
+
+/* 연관 검색어 css */ 
+.css-13gn9e4 {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+    width: calc(100% - 40px);
+}
+
+/* 연관 검색어 css */ 
+.css-1iet6e5 {
+    font-size: 14px;
+    letter-spacing: -0.25px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 연관 검색어 css */ 
+.css-1gmeppe {
+    color: rgb(0, 112, 120);
+    display: inline;
 }
 
 /*search result*/      
@@ -2743,6 +2858,51 @@ button, [type='button'], [type='reset'], [type='submit'] {
                         <!-- 텍스트 필드 body -->                
                         </div>
       			  </div> 	
+      			  
+      			<!--  연관검색어 목록-->  
+      			  <div class="css-gflgma1">
+      			  
+      			  <!-- 연관 카테고리 및 브랜드 이름 -->
+      			  <button type="button" class="css-6iux0g">
+      			  <img src="" class="css-ryc40a" alt="프랜차이즈 로고">
+      			  <p class="css-13gn9e4">
+      			  <span class="css-1iet6e5">test</span>
+      			  <span class="css-1kn92c3"> test</span>
+      			  </p>
+      			  </button>
+      			    <button type="button" class="css-6iux0g">
+      			  <img src="" class="css-ryc40a" alt="프랜차이즈 로고">
+      			  <p class="css-13gn9e4">
+      			  <span class="css-1iet6e5"> test</span>
+      			  <span class="css-1kn92c3"> test</span>
+      			  </p>
+      			  </button>
+      			  	    <button type="button" class="css-6iux0g">
+      			  <img src="" class="css-ryc40a" alt="프랜차이즈 로고">
+      			  <p class="css-13gn9e4">
+      			  <span class="css-1iet6e5"> test</span>
+      			  <span class="css-1kn92c3"> test</span>
+      			  </p>
+      			  </button>
+      			 <!-- 연관 카테고리 및 브랜드 이름 -->
+      			  	  
+      			  	  
+      			  <!-- 경계선 -->
+      			  <div class="css-pkdumz"></div>
+      			 <!-- 경계선 -->
+      			  	  
+      			    <!-- 연관 주소 -->
+      			  <button type="button" class="css-1chdash">
+      			  <img src="" alt="주소 제안" class="css-ryc40a">
+      			  <p class="css-13gn9e4">
+      			  <span class="css-1iet6e5">loaction test<span class="css-1gmeppe"></span></span>
+      			  </p></button>
+      			  <!-- 연관 주소 -->
+    
+      			  </div>
+      			  
+      			  	<!--  연관검색어 목록 -->  
+      			  	
       			  </div>	   
 <script>
 <!-- 특수문자 삭제 -->
@@ -2774,20 +2934,29 @@ function updateSearchHistoryOnServer(searchString) {
     });
 }
 
-//검색 필드를 클릭할 때 텍스트 필드가 나오도록 처리
+//검색 필드를 클릭할 때 검색 목록이 나오도록 처리
 document.querySelector('.css-i5sibr').addEventListener('click', function () {
     document.querySelector('.css-gflgma').classList.add('active');
 });
 
-// 다른 곳을 클릭하면 검색 필드가 사라지도록 처리
+// 검색 필드에서 텍스트가 입력될 때 검색 목록이 사라지고 연관 검색어 목록이 나오도록 처리
+document.getElementById('searchString').addEventListener('input', function() {
+    // 입력된 텍스트의 길이가 1 이상일 때 검색 목록을 닫고 연관 검색어 목록을 보이도록 처리
+    if (this.value.length >= 1) {
+        document.querySelector('.css-gflgma').classList.remove('active');
+        document.querySelector('.css-gflgma1').classList.add('active');
+    } else { // 입력된 텍스트가 없으면 검색 목록을 보이고 연관 검색어 목록을 숨김
+        document.querySelector('.css-gflgma').classList.add('active');
+        document.querySelector('.css-gflgma1').classList.remove('active');
+    }
+});
+
+// 다른 곳을 클릭하면 검색 목록이 사라지도록 처리
 document.addEventListener('click', function (event) {
     if (!event.target.closest('.css-i5sibr')) {
         document.querySelector('.css-gflgma').classList.remove('active');
     }
 });
-	
-	
-	
 	
 	
 	
@@ -2810,6 +2979,7 @@ function handleKeyDown(event) {
     	  var searchString = $("#searchString").val(); 
           //input 으로 사용시에는 id값으로  불러서 value값으로 처리할수있다 
       updateSearchHistoryOnServer(searchString);
+      document.querySelector('.css-gflgma1').classList.remove('active');
         event.preventDefault(); // 폼 제출 방지
         
         performSearch(searchString);

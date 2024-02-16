@@ -44,6 +44,11 @@
       </dependency>
             
             
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20210307</version> <!-- 혹은 더 최신 버전 -->
+</dependency>
             
             	<!-- 이메일 인증을 위한 API -->
 		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->

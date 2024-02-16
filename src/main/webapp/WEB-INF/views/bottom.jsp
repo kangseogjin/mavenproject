@@ -69,6 +69,7 @@
          <p>
             F4 <br class="mrs"> <span>|</span> (주)황색 <br class="mrs">
             <span>|</span> 사업자등록번호 : 000-00-00000
+            
          </p>
          <p>
             주소 : 서울특별시 종로구 어딘가 5층 509호 <br class="mrs"> <span>|</span> 대표번호

@@ -299,8 +299,8 @@ public class SangkwonData {
         // 주점
         else if (storeName.equals("범맥주")) {
 			image ="https://xn--b02b32cj6q.kr/img/common/bi.png";
-		}else if (storeName.equals("인쌩맥주")) {
-			image ="https://cdn.imweb.me/thumbnail/20240110/7678df87dbf2f.png";
+		}else if (storeName.equals("인쌩맥주") || storeName.equals("인생맥주")) {
+			image ="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA4MjZfMTY0%2FMDAxNjkzMDM1OTkwMzA1.JwQnORID5Voy1cIa9868rPKnYUe6BKrOslePyXkLpmgg.qy9j86OgCGm3DSQXXSRr7AOqmwPUJ3UrFchFa44MpvYg.JPEG.honggun0210%2FKakaoTalk_20230826_050722141.jpg&type=sc960_832";
 		}else if (storeName.equals("한신포차")) {
 			image ="https://hanshinpocha.com/wp-content/themes/hanshin/images/logo.png";
 		}else if (storeName.equals("역전할머니맥주")) {
@@ -358,7 +358,7 @@ public class SangkwonData {
 		}else if (storeName.equals("빽다방")) {
 			image ="https://paikdabang.com/wp-content/themes/paikdabang/assets/images/logo.png";
 		}else if (storeName.equals("투썸")) {
-			image ="https://mblogthumb-phinf.pstatic.net/20160606_73/ppanppane_1465209281096IMW3u_PNG/%C5%F5%BD%E6_%C7%C3%B7%B9%C0%CC%BD%BA%B7%CE%B0%ED_%282%29.png?type=w800";
+			image ="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20140827_119%2Fisac20000_14091229987616yJmz_JPEG%2Ftwosomeplace.jpg&type=sc960_832";
 		}
 		return image;
 	}
@@ -408,84 +408,152 @@ public class SangkwonData {
     }
     
     public String getDistrict(String searchString) {
+    	searchString = searchString.replaceAll("\\s", "").toLowerCase(); //switch case문은 띄어쓰기가 처리가
+    	//안되서 공백 제거후에 처리해준다.
     	switch (searchString) {
     	case "서울시" :
     	case "서울":
     	case "서":
-    		return "서울";
+    	case "서울특별시":  		
+    	return "서울";
+    	
     	case "중구" :
+    	case "서울시중구" :
+    	case "서울특별시중구" :
     		return "중구";
+    		
     	case "종로" :
     	case "종로구":
+    	case "서울시종로구" :
+    	case "서울특별시종로구" :
     		return "종로구";
+    		
     	case "용산" :
     	case "용산구":
+    	case "서울시용산구" :
+    	case "서울특별시용산구" :
     		return "용산구";
+    		
     	case "성동구" :
     	case "성동":
+    	case "서울시성동구" :
+    	case "서울특별시성동구" :
     		return "성동구";
+    		
     	case "광진" :
     	case "광진구":
+    	case "서울시광진구" :
+    	case "서울특별시광진구" :
     		return "광진구";
+    		
     	case "동대문" :
     	case "동대문구":
+    	case "서울시동대문구" :
+    	case "서울특별시동대문구" :
     		return "동대문구";
+    		
     	case "중랑" :
     	case "중랑구":
+    	case "서울시중랑구" :
+    	case "서울특별시중랑구" :
     		return "중랑구";
+    		
 		case "성북" :
     	case "성북구":
+    	case "서울시성북구" :
+    	case "서울특별시성북구" :
     		return "성북구";
+    		
     	case "강북" :
     	case "강북구":
+    	case "서울시강북구" :
+    	case "서울특별시강북구" :
     		return "강북구";
+    		
     	case "도봉" :
     	case "도봉구":
+    	case "서울시도봉구" :
+    	case "서울특별시도봉구" :
     		return "도봉구";
+    		
     	case "노원" :
     	case "노원구":
+    	case "서울시노원구" :
+    	case "서울특별시노원구" :
     		return "노원구";
+    		
     	case "은평" :
     	case "은평구":
+    	case "서울시은평구" :
+    	case "서울특별시은평구" :
     		return "은평구";
+    		
     	case "서대문" :
     	case "서대문구":
+    	case "서울시서대문구" :
+    	case "서울특별시서대문구" :
     		return "서대문구";
+    		
     	case "마포" :
     	case "마포구":
+    	case "서울시마포구" :
+    	case "서울특별시마포구" :
     		return "마포구";
+    		
     	case "양천" :
     	case "양천구":
+    	case "서울시양천구" :
+    	case "서울특별시양천구" :
     		return "양천구";
     	case "강서" :
     	case "강서구":
+    	case "서울시강서구" :
+    	case "서울특별시강서구" :
     		return "강서구";
     	case "구로" :
     	case "구로구":
+    	case "서울시구로구" :
+    	case "서울특별시구로구" :
     		return "구로구";
     	case "금천" :
     	case "금천구":
+    	case "서울시금천구" :
+    	case "서울특별시금천구" :
     		return "금천구";
     	case "영등포" :
     	case "영등포구":
+    	case "서울시영등포구" :
+    	case "서울특별시영등포구" :
     		return "영등포구";
     	case "동작" :
     	case "동작구":
+    	case "서울시동작구" :
+    	case "서울특별시동작구" :
     		return "동작구";
     	case "관악" :
     	case "관악구":
+    	case "서울시관악구" :
+    	case "서울특별시관악구" :
     		return "관악구";
     	case "서초" :
     	case "서초구":
+    	case "서울시서초구" :
+    	case "서울특별시서초구" :
     		return "서초구";
 		case "강남" :
     	case "강남구":
+    	case "서울시강남구" :
+    	case "서울특별시강남구" :
     		return "강남구";
     	case "송파" :
     	case "송파구":
+    	case "서울시송파구" :
+    	case "서울특별시송파구" :
     		return "송파구";
     	case "강동구" :
     	case "강동":
+    	case "서울시강동구" :
+    	case "서울특별시강동구" :
     		return "강동구";
     	case "강":
         	return "강";
@@ -497,6 +565,8 @@ public class SangkwonData {
     }
     
     public String getStoreName(String searchString) {
+    	searchString = searchString.replaceAll("\\s", "").toLowerCase(); //switch case문은 띄어쓰기가 처리가
+    	//안되서 공백 제거후에 처리해준다.
     	switch (searchString) {
     	case "비비큐" :
     	case "BBQ" :
@@ -541,7 +611,7 @@ public class SangkwonData {
     	case "장충동왕족발보쌈":
     	case "장충동":
     		return "장충동";
-    	case "마왕 족발" :
+    	case "마왕족발" :
     	case "마왕":
     		return "마왕족발";
     	case "귀한" :

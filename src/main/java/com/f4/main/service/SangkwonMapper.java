@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.f4.main.dto.SangkwonDTO;
-
+ 
 @Service
 public class SangkwonMapper {
    
@@ -50,6 +50,9 @@ public class SangkwonMapper {
 	    return count;
 	}
 	
+	
+
+
 	public List<SangkwonDTO> getCoordinate(String tablename, String storeAddress, String storeName){
 		Map<String, String> params = new HashMap<>();
 	    params.put("tablename", tablename);

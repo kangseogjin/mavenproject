@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,10 +42,13 @@ import com.f4.main.service.SangkwonCode;
 import com.f4.main.service.SangkwonData;
 import com.f4.main.service.SangkwonMapper;
 import com.f4.main.service.SangkwonName;
+import com.f4.main.service.SearchService;
 
 @Controller
 public class SangkwonController {
-
+	
+	@Autowired
+	private SearchService  searchService;
 
 	   @Autowired
 	   private SangkwonMapper sangkwonmapper;
@@ -246,7 +251,7 @@ public class SangkwonController {
 		     Map<Double, String> address = new HashMap<>();
 			 String tableName = null;
 			 String district = null;
-
+            // System.out.println(searchString);
 		        tableName = sangkwondata.getTableName(searchString.replace(" ", "")); // 검색결과를 getTableName메서드에서 비교해서 업종명인지 비교
 		        
 		        if (tableName == null) {	// 검색 결과가 업종명이 아닌경우
@@ -360,7 +365,84 @@ public class SangkwonController {
 		        }
 		    }
 
+		 
+	//연관 검색어
+		 @GetMapping("/related_keywords.do")
+		 @ResponseBody
+		 public ResponseEntity<Map<String, Object>> related_keywords(HttpServletRequest req, @RequestParam String searchString) {
+			 
+		     Map<String, Object> suggestionsMap = new HashMap<>();
+		     List<String>District=searchService.getDistrictsuggestionslist();
+		     List <String>list=searchService.getCatelist();
+		     Map<Object,Object>  autoCompleteSuggestions= new LinkedHashMap<>(); 
+		     // LinkedHashMap을 사용  맵의 순서가 삽인된 순서로 보장 된다.(LinkedHashMap을 쓰면)
+		     
+		     if (searchString.length() >= 1) {
+		         if ( searchString.equals("서울") || searchString.equals("서울시")|| searchString.equals("서울특별시")|| searchString.equals("서")) {
+		        	 // ||는 or 연산자 &&는 and연산자  
+		        	 if(searchString.equals("서")) {
+		        		 Map<String, Map<String, String>> brandSuggestions1 = searchService.getAutoCompleteBrandSuggestions(searchString);
+		        		 suggestionsMap.put("brandSuggestions1", brandSuggestions1);
+		        		
+		        		 List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);
+		        		 Map<String, Object> suggestion;
+		        	     Map<Object,Object>  autoCompleteSuggestions3= new LinkedHashMap<>(); 
+			             
+		        	     for(String district : autoCompleteSuggestions1) {
+			            	 suggestion = new HashMap<>();
+			            	 int count = searchService.getStoreAddressCount(district);    
+			            	 suggestion.put("distric",district);
+			            	 suggestion.put("count",count);
+			          //  	 System.out.println(suggestion);
+			            	 autoCompleteSuggestions3.put(district, suggestion);
+			             }
+			             suggestionsMap.put("autoCompleteSuggestions3", autoCompleteSuggestions3);
+		          }  
+		        	 else {  
+		        	  List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);
+	
+		             for(String district : autoCompleteSuggestions1) {
+		            	 Map<String, Object> suggestion = new HashMap<>();
+		            	 int count = searchService.getStoreAddressCount(district);    
+		            	 suggestion.put("distric",district);
+		            	 suggestion.put("count",count);
+		          //  	 System.out.println(suggestion);
+		            	 autoCompleteSuggestions.put(district, suggestion);
+		                 }
+		                  suggestionsMap.put("autoCompleteSuggestions", autoCompleteSuggestions);
+		                 }
 
+                } else {
+		        	 for(String cate : list) {
+		        		 if(cate.equals(searchString)) {
+		        			 Map<String, Map<String, Map<String,String>>> cateSuggestions = searchService.getAutoCompleteCateSuggestions(searchString);
+		        		     suggestionsMap.put("cateSuggestions", cateSuggestions);
+		        		 }
+		        	 }		        	 
+		        	 if(! suggestionsMap.containsKey("cateSuggestions")) {
+		        		 Map<String, Map<String, String>> brandSuggestions = searchService.getAutoCompleteBrandSuggestions(searchString);
+		        		 suggestionsMap.put("brandSuggestions", brandSuggestions);
+		        	 }	 
+		        	 if(! suggestionsMap.containsKey("cateSuggestions")&&  searchString.length() >= 2 &&searchString.contains("구")) { 		 
+		        		Map<String,Object>DBTD= searchService.getStoreNameByAddress(searchString);
+		             //	 System.out.println(DBTD);
+		        	    suggestionsMap.put("DBTD", DBTD);
+		        	    Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
+		        		 List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
+			             for(String district : autoCompleteSuggestions1) {
+			            	 Map<String, Object> suggestion = new HashMap<>();
+			            	 int count = searchService.getStoreAddressCount(district);    
+			            	 suggestion.put("distric",district);
+			            	 suggestion.put("count",count);
+			              //	 System.out.println(suggestion);
+			            	 autoCompleteSuggestions2.put(district, suggestion);
+			             }
+			         	 suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
+		        	 }
+		         }
+		     }
+		     return new ResponseEntity<>(suggestionsMap, HttpStatus.OK);
+		 }
 		 
 		 
 		 @GetMapping("/SelectRegion.do")
@@ -368,8 +450,7 @@ public class SangkwonController {
 		 public ResponseEntity<Map<String, Object>> SelectRegion(HttpServletRequest req, @RequestParam String tableName, @RequestParam String Region, Model model) {
 
 			 try {
-		    	 
-		    	 
+	
 		    	 String storeAddress =  Region;        
 
 				    Map<String, Map<String,Integer>> counts = new HashMap<>(); 	// Map<업종, Map<브랜드명, 개수>>

@@ -20,6 +20,27 @@
 		SELECT COUNT(*) FROM ${tableName} WHERE storeName LIKE '%' || #{storeName} || '%'	   
 	</select>
 	
+<!-- 연관 검색어  -->
+	<select id="getStoreNameByAddress" resultType="string" parameterType="Map">
+    <!-- UNION ALL을 사용하여 각 테이블의 결과를 합칩니다 -->
+    <foreach collection="tableNames" item="tableName" separator=" UNION ">
+        <!-- 각 테이블에서 storeAddress가 유사한 경우에 storename  을가져오는 쿼리 -->
+        	SELECT StoreName  FROM ${tableName} WHERE storeAddress LIKE '%' || #{storeAddress} || '%'	  
+    </foreach>
+</select>
+<!-- 연관 검색어  -->
+
+	
+<!-- 연관 검색어  -->
+<select id="getStoreAddressCount" resultType="int" parameterType="Map">
+    <!-- UNION ALL을 사용하여 각 테이블의 결과를 합칩니다 -->
+    <foreach collection="tableNames" item="tableName" separator=" UNION ">
+        <!-- 각 테이블에서 storeAddress가 유사한 경우의 개수를 세는 쿼리 -->
+        	SELECT COUNT(*) FROM ${tableName} WHERE storeAddress LIKE '%' || #{storeAddress} || '%'	  
+    </foreach>
+</select>
+<!-- 연관 검색어  -->
+	
 	<select id="countByValueT" parameterType="map" resultType="int"> 
 		SELECT COUNT(*) FROM ${tablename} WHERE storeAddress LIKE '%' || #{storeAddress} || '%'
 	    AND storeName LIKE '%' || #{storeName} || '%'

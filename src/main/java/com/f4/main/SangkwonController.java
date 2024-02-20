@@ -371,50 +371,53 @@ public class SangkwonController {
 		 @ResponseBody
 		 public ResponseEntity<Map<String, Object>> related_keywords(HttpServletRequest req, @RequestParam String searchString) {
 			 
-		     Map<String, Object> suggestionsMap = new HashMap<>();
+		     Map<String, Object> suggestionsMap=null;
 		     List<String>District=searchService.getDistrictsuggestionslist();
 		     List <String>list=searchService.getCatelist();
-		     Map<Object,Object>  autoCompleteSuggestions= new LinkedHashMap<>(); 
+		     Map<Object,Object>  autoCompleteSuggestions;
 		     // LinkedHashMap을 사용  맵의 순서가 삽인된 순서로 보장 된다.(LinkedHashMap을 쓰면)
-		     
-		     if (searchString.length() >= 1) {
+
 		         if ( searchString.equals("서울") || searchString.equals("서울시")|| searchString.equals("서울특별시")|| searchString.equals("서")) {
 		        	 // ||는 or 연산자 &&는 and연산자  
 		        	 if(searchString.equals("서")) {
+		        		 autoCompleteSuggestions= new LinkedHashMap<>(); 
+		        		 suggestionsMap = new HashMap<>();
 		        		 Map<String, Map<String, String>> brandSuggestions1 = searchService.getAutoCompleteBrandSuggestions(searchString);
 		        		 suggestionsMap.put("brandSuggestions1", brandSuggestions1);
 		        		
-		        		 List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);
+		        		 List<String> autoCompleteSuggestionslist = searchService.getAutoCompleteSuggestions(searchString);
 		        		 Map<String, Object> suggestion;
-		        	     Map<Object,Object>  autoCompleteSuggestions3= new LinkedHashMap<>(); 
+		        	 
 			             
-		        	     for(String district : autoCompleteSuggestions1) {
+		        	     for(String district : autoCompleteSuggestionslist) {
 			            	 suggestion = new HashMap<>();
 			            	 int count = searchService.getStoreAddressCount(district);    
 			            	 suggestion.put("distric",district);
 			            	 suggestion.put("count",count);
 			          //  	 System.out.println(suggestion);
-			            	 autoCompleteSuggestions3.put(district, suggestion);
+			            	 autoCompleteSuggestions.put(district, suggestion);
 			             }
-			             suggestionsMap.put("autoCompleteSuggestions3", autoCompleteSuggestions3);
+			             suggestionsMap.put("autoCompleteSuggestions", autoCompleteSuggestions);
 		          }  
 		        	 else {  
 		        	  List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);
-	
+		        	  suggestionsMap = new HashMap<>();
+		        	   Map<Object,Object> autoCompleteSuggestions12= new LinkedHashMap<>(); 
 		             for(String district : autoCompleteSuggestions1) {
 		            	 Map<String, Object> suggestion = new HashMap<>();
 		            	 int count = searchService.getStoreAddressCount(district);    
 		            	 suggestion.put("distric",district);
 		            	 suggestion.put("count",count);
 		          //  	 System.out.println(suggestion);
-		            	 autoCompleteSuggestions.put(district, suggestion);
+		            	 autoCompleteSuggestions12.put(district, suggestion);
 		                 }
-		                  suggestionsMap.put("autoCompleteSuggestions", autoCompleteSuggestions);
+		                  suggestionsMap.put("autoCompleteSuggestions12", autoCompleteSuggestions12);
 		                 }
 
                 } else {
+                	suggestionsMap = new HashMap<>();
 		        	 for(String cate : list) {
-		        		 if(cate.equals(searchString)) {
+		        		 if(cate.equals(searchString)) {   		
 		        			 Map<String, Map<String, Map<String,String>>> cateSuggestions = searchService.getAutoCompleteCateSuggestions(searchString);
 		        		     suggestionsMap.put("cateSuggestions", cateSuggestions);
 		        		 }
@@ -423,24 +426,33 @@ public class SangkwonController {
 		        		 Map<String, Map<String, String>> brandSuggestions = searchService.getAutoCompleteBrandSuggestions(searchString);
 		        		 suggestionsMap.put("brandSuggestions", brandSuggestions);
 		        	 }	 
-		        	 if(! suggestionsMap.containsKey("cateSuggestions")&&  searchString.length() >= 2 &&searchString.contains("구")) { 		 
+		        	 
+		        	 if(! suggestionsMap.containsKey("cateSuggestions")&&  searchString.length() >= 2) {
+		        		 if(!(searchString.contains("구"))) {
 		        		Map<String,Object>DBTD= searchService.getStoreNameByAddress(searchString);
-		             //	 System.out.println(DBTD);
-		        	    suggestionsMap.put("DBTD", DBTD);
-		        	    Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
-		        		 List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
-			             for(String district : autoCompleteSuggestions1) {
-			            	 Map<String, Object> suggestion = new HashMap<>();
-			            	 int count = searchService.getStoreAddressCount(district);    
-			            	 suggestion.put("distric",district);
-			            	 suggestion.put("count",count);
-			              //	 System.out.println(suggestion);
-			            	 autoCompleteSuggestions2.put(district, suggestion);
-			             }
-			         	 suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
+		        	    suggestionsMap.put("DBTD", DBTD);	    
+		        	          Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
+		        		      List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
+			                   for(String district : autoCompleteSuggestions1) {
+			            	    Map<String, Object> suggestion = new HashMap<>();
+			            	   int count = searchService.getStoreAddressCount(district);    
+			            	    suggestion.put("distric",district);
+			            	   suggestion.put("count",count);
+			                     //	 System.out.println(suggestion);
+			            	    autoCompleteSuggestions2.put(district, suggestion);
+			                    }
+			         	      suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
+		        	       } 
+		        		 else {
+			        			 suggestionsMap = new HashMap<>();
+			            		 Map<String,Integer>CityData=searchService.getNeighborhoodByCityname(searchString);
+					                suggestionsMap.put("CityData", CityData);
+				     }	       
 		        	 }
-		         }
-		     }
+		        	
+
+		        	 }
+		  
 		     return new ResponseEntity<>(suggestionsMap, HttpStatus.OK);
 		 }
 		 

@@ -20,10 +20,28 @@
 		SELECT COUNT(*) FROM ${tableName} WHERE storeName LIKE '%' || #{storeName} || '%'	   
 	</select>
 	
+	
+	<!-- 연관 검색어  -->
+	<select id="getNeighborhoodByCityname" resultType="string" parameterType="Map">
+  <foreach collection="tableNames" item="tableName" separator=" UNION ALL">  
+     SELECT SUBSTR(storeAddress,1, INSTR(storeAddress, ' ', 1, 3)) 
+     <!-- SUBSTR의 2번째 매개변수는 추출할 문자열의 시작점을 정하는거고 상수로 기입하면 왼쪽에서 상수만큼의 위치로 시작점을
+     정한다 3번쨰 매개변수는 추출할 문자의 길이를 나타내고 생략을 한다면 추출할 문자열의 다음위치의 문자열을 추출한다.
+     INSTR의 매개변수는 2개로 표현하거나 4개로 표현할수 있다. 2개로 표현은 주로 추출할 문자열의 위치를 찾을때 쓰고
+     4개로 표현할때는 첫번째는 값은 전체 문자열 두번째는 패턴 세번째는 패턴의 시작점 4번째는 찾는 패턴의 위치 이렇게 정해서
+     해당 패턴의 위치를 찾는다. -->
+    FROM ${tableName}
+    WHERE storeAddress LIKE '%' || #{storeAddress} || '%'
+  </foreach>
+</select>
+<!-- 연관 검색어  -->
+	
+	
+
 <!-- 연관 검색어  -->
 	<select id="getStoreNameByAddress" resultType="string" parameterType="Map">
     <!-- UNION ALL을 사용하여 각 테이블의 결과를 합칩니다 -->
-    <foreach collection="tableNames" item="tableName" separator=" UNION ">
+    <foreach collection="tableNames" item="tableName" separator=" UNION ALL">
         <!-- 각 테이블에서 storeAddress가 유사한 경우에 storename  을가져오는 쿼리 -->
         	SELECT StoreName  FROM ${tableName} WHERE storeAddress LIKE '%' || #{storeAddress} || '%'	  
     </foreach>
@@ -34,7 +52,7 @@
 <!-- 연관 검색어  -->
 <select id="getStoreAddressCount" resultType="int" parameterType="Map">
     <!-- UNION ALL을 사용하여 각 테이블의 결과를 합칩니다 -->
-    <foreach collection="tableNames" item="tableName" separator=" UNION ">
+    <foreach collection="tableNames" item="tableName" separator=" UNION ALL">
         <!-- 각 테이블에서 storeAddress가 유사한 경우의 개수를 세는 쿼리 -->
         	SELECT COUNT(*) FROM ${tableName} WHERE storeAddress LIKE '%' || #{storeAddress} || '%'	  
     </foreach>

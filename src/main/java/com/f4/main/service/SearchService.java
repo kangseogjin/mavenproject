@@ -63,10 +63,9 @@ public class SearchService {
      }
    }
    
-  
+  //해당 주소의 매장
     public Map<String, Object> getStoreNameByAddress(String storeAddress){
-        
-    	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
+          	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
 	    Map<String, Object> parameters = new HashMap<>();
 	       Map<String,String>  brandData;
 		 
@@ -83,7 +82,6 @@ public class SearchService {
         	   uniqueBrandNames.add(uniqueBrandname);
            }
   
-    
            Map<String,Object> districtbranddata=new HashMap<String, Object>();
            
     	   for(String brandname : uniqueBrandNames) {		
@@ -100,7 +98,34 @@ public class SearchService {
            return DTBD;
     }
     
+  //해당 주소의 동까지 추출
+    public Map<String,Integer> getNeighborhoodByCityname(String storeAddress){
+    	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
+
+	    Map<String, Object> parameters = new HashMap<>();
+	    Set<String> uniquecity =new HashSet<String>();
+	    parameters.put("tableNames", tableNames);
+	    parameters.put("storeAddress",storeAddress);
+           
+	    System.out.println(storeAddress);
+	      // < --쿼리문-->
+           List<String> city = sqlSession.selectList("getNeighborhoodByCityname", parameters);
+           //< --쿼리문-->
+           
+      //  System.out.println(city);
+           Map<String,Integer> uniquecitydata=new HashMap<String, Integer>();
+          for(String cityname : city) {
+      System.out.println(cityname);
+      
+            uniquecitydata.put(cityname, uniquecitydata.getOrDefault(cityname, 0) + 1);
+            // getOrDefalut는 해당 map의 키의 값이  없으면  반환값을 지정해주는 메서드로 매개변수 첫번쨰는
+            //키  두번째는 반환값으로 처리한다 그래서 위의 코드는 키의 값이 없으면 0으로 반환시키고 1을 더한다는 말로
+            //키의 값이 있으면 해당 키의 값을 가져오고 1을 더한다.
+          }
+           return uniquecitydata;
+    }
     
+
  // 시,구 별 매장 개수 조회
     public int getStoreAddressCount(String storeAddress) {
         int totalCount = 0;
@@ -122,8 +147,7 @@ public class SearchService {
             // 매개변수 설정
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("tableNames", tableNames);
-            parameters.put("storeAddress", "%" + storeAddress + "%");
-            
+            parameters.put("storeAddress", "%" + storeAddress + "%"); 
             // MyBatis 쿼리문
             List<Integer> counts = sqlSession.selectList("getStoreAddressCount", parameters);
             

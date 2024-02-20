@@ -2920,23 +2920,26 @@ document.getElementById('searchString').addEventListener('input', function() {
             data: { searchString: searchString },
             success: function(response) {
                 var html = '';
-                if (response && response.autoCompleteSuggestions && Object.keys(response.autoCompleteSuggestions).length > 0) {
-                    for(var district in response.autoCompleteSuggestions) {
-                        if (response.autoCompleteSuggestions.hasOwnProperty(district)) {
-                        	 var suggestion = response.autoCompleteSuggestions[district];
-                             var count = suggestion.count;
-                             var districtName = suggestion.distric;
-                            html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
-                            html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
-                            html += ' <p class="css-13gn9e4">';
-                            html += '  <span class="css-1iet6e5">' + districtName + '</span>';
-                            html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
-                            html += '</p>';
-                            html += '</button>';
+                 if(response && response.autoCompleteSuggestions12 && Object.keys(response.autoCompleteSuggestions12).length > 0){
+                	 for(var district in response.autoCompleteSuggestions12) {
+                         if (response.autoCompleteSuggestions12.hasOwnProperty(district)) {
+                         	 var suggestion = response.autoCompleteSuggestions12[district];
+                              var count = suggestion.count;
+                              var districtName = suggestion.distric;
+                             html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
+                             html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
+                             html += ' <p class="css-13gn9e4">';
+                             html += '  <span class="css-1iet6e5">' + districtName + '</span>';
+                             html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
+                             html += '</p>';
+                             html += '</button>';	         
+                         }
+                     }
                 
-                        }
-                    }
-                }  else if (response && response.brandSuggestions && Object.keys(response.brandSuggestions).length > 0) {
+                 }
+                
+                
+                else if (response && response.brandSuggestions && Object.keys(response.brandSuggestions).length > 0) {
                     for (var suggestion in response.brandSuggestions) {
                         if (response.brandSuggestions.hasOwnProperty(suggestion)) {
                           var brandinfo=response.brandSuggestions[suggestion];
@@ -2973,7 +2976,7 @@ document.getElementById('searchString').addEventListener('input', function() {
           } 
         }
               
-     }else if((response && response.autoCompleteSuggestions2 && Object.keys(response.autoCompleteSuggestions2).length > 0 && response.DBTD && Object.keys(response.DBTD).length > 0 )|| (response && response.brandSuggestions && Object.keys(response.brandSuggestions).length > 0)){
+     }else if(response && response.autoCompleteSuggestions2 && Object.keys(response.autoCompleteSuggestions2).length > 0 && response.DBTD && Object.keys(response.DBTD).length > 0){
 
     	 for(var district in response.autoCompleteSuggestions2) {
              if (response.autoCompleteSuggestions2.hasOwnProperty(district)) {
@@ -3012,40 +3015,58 @@ document.getElementById('searchString').addEventListener('input', function() {
            } 
          }
       }                    
-     }else if((response && response.brandSuggestions1 && Object.keys(response.brandSuggestions1).length > 0 && response.autoCompleteSuggestions3 && Object.keys(response.autoCompleteSuggestions3).length > 0 )){
-         for (var suggestion in response.brandSuggestions1) {
-             if (response.brandSuggestions1.hasOwnProperty(suggestion)) {
-               var brandinfo=response.brandSuggestions1[suggestion];
-             	var imageUrl = brandinfo.imageUrl;
-                 var cateSuggestion = brandinfo.findcate;
-                 html += '<button type="button" class="css-6iux0g" data-search-string="' + suggestion + '" onclick="RealtionSearchButtonClick(event)">';
-                 html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
-                 html += ' <p class="css-13gn9e4">';
-                 html += '  <span class="css-1iet6e5">' + suggestion + '</span>';
-                 html +=' <span class="css-1kn92c3">'+ cateSuggestion +'</span>';
-                 html += '</p>';
-                 html += '</button>';
-             }
-         }
-         
-         html +='<div class="css-pkdumz"></div>';
-         
-         for(var district in response.autoCompleteSuggestions3) {
-             if (response.autoCompleteSuggestions3.hasOwnProperty(district)) {
-             	 var suggestion = response.autoCompleteSuggestions3[district];
-                  var count = suggestion.count;
-                  var districtName = suggestion.distric;
-                 html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
+     }else if((response && response.brandSuggestions1 && Object.keys(response.brandSuggestions1).length > 0) ||  (response && response.autoCompleteSuggestions && Object.keys(response.autoCompleteSuggestions).length > 0)){
+    
+    	   for (var suggestion in response.brandSuggestions1) {
+               if (response.brandSuggestions1.hasOwnProperty(suggestion)) {
+                 var brandinfo=response.brandSuggestions1[suggestion];
+               	var imageUrl = brandinfo.imageUrl;
+                   var cateSuggestion = brandinfo.findcate;
+                   html += '<button type="button" class="css-6iux0g" data-search-string="' + suggestion + '" onclick="RealtionSearchButtonClick(event)">';
+                   html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
+                   html += ' <p class="css-13gn9e4">';
+                   html += '  <span class="css-1iet6e5">' + suggestion + '</span>';
+                   html +=' <span class="css-1kn92c3">'+ cateSuggestion +'</span>';
+                   html += '</p>';
+                   html += '</button>';
+               }
+           }
+    	         html +='<div class="css-pkdumz"></div>';
+    	
+    	         for(var district in response.autoCompleteSuggestions) {
+    	             if (response.autoCompleteSuggestions.hasOwnProperty(district)) {
+    	             	 var suggestion = response.autoCompleteSuggestions[district];
+    	                  var count = suggestion.count;
+    	                  var districtName = suggestion.distric;
+    	                 html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
+    	                 html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
+    	                 html += ' <p class="css-13gn9e4">';
+    	                 html += '  <span class="css-1iet6e5">' + districtName + '</span>';
+    	                 html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
+    	                 html += '</p>';
+    	                 html += '</button>';
+    	    	         
+    	         }
+    	     }
+     }
+     else if(response && response.CityData && Object.keys(response.CityData).length > 0){
+    	 
+    	 for(var cityname in response.CityData) {
+             if (response.CityData.hasOwnProperty(cityname)) {
+             	 var count = response.CityData[cityname];
+          
+                 html += '<button type="button" class="css-6iux0g"  data-search-string="' + cityname + '" onclick="RealtionSearchButtonClick(event)">';
                  html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
                  html += ' <p class="css-13gn9e4">';
-                 html += '  <span class="css-1iet6e5">' + districtName + '</span>';
+                 html += '  <span class="css-1iet6e5">' + cityname + '</span>';
                  html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
                  html += '</p>';
                  html += '</button>';
     	         
-             }
          }
      }
+     }
+                     
      else {
             	  html = '<p class="css-1czv3nb" style="font-weight: bold ; margin-left: 30px;  margin-top:100px;">해당 관련 검색어가 없습니다!</p>';        
                   html += '<div class="css-yz1nei" style="margin-top: 30px; margin-left: 110px;">';

@@ -251,8 +251,56 @@ public class SangkwonController {
 		     Map<Double, String> address = new HashMap<>();
 			 String tableName = null;
 			 String district = null;
-            // System.out.println(searchString);
+            
 		        tableName = sangkwondata.getTableName(searchString.replace(" ", "")); // 검색결과를 getTableName메서드에서 비교해서 업종명인지 비교
+		        
+		        //연관검색어 동으로 검색할떄 !!
+		        if(searchString.contains("동")) {  //contains와 contentsequals랑 혼동했다
+		        	//contains는 문자열안에 포함되는지  contentesequals는 문자열안에 해당문자가 있는지를 물어보는 메서드이다.
+		        	
+		    		for (String tablename : sangkwonname.getKeys()) { // StoreName서비스 클래스에서 부모 key값을 tableName에 저장
+	    		        
+	    		        for (String storeName : sangkwonname.getValues(tablename)) {
+	    		            List<SangkwonDTO> list = sangkwonmapper.getCoordinate(tablename, searchString, storeName);
+	    		            int count = sangkwonmapper.countByValueT(tablename, searchString, storeName); // 각 값에 대한 카운트를 가져옴
+	    		           
+	    		           
+	    		            if (count != 0) {       //갯수가 0인경우 추가하지 않음 
+	    		                Map<Double, Double> coordinate = new HashMap<>(); // 브랜드 이름과 해당하는 데이터의 좌표를 담을 맵
+		    		            for (SangkwonDTO dto : list) {
+		    		                coordinate.put(dto.getX(), dto.getY());
+		    		                address.put(dto.getX(), dto.getStoreAddress());
+		    		                // y좌표를 key값으로 저장하고 x좌표를 value값으로 저장
+		    		            }        
+		    		            String image = sangkwondata.image(storeName);
+		    		            img.put(storeName, image);
+		    		            map.put(storeName, coordinate);
+		    		            counts.put(storeName,count);
+	    		            }
+	           
+	    		        }
+	    		    }
+	        		if (searchString.equals("강")) {
+	        			sangkwondata.XY("강남구", model);
+	        		}else if (searchString.equals("성")) {
+	        			sangkwondata.XY("성동구", model);
+
+	        		}else {
+	        			sangkwondata.XY(searchString, model);
+	        		}
+	        		Map<String, Object> response = new HashMap<>();
+			        response.put("counts", counts);   
+			        response.put("map", map);
+			        response.put("img", img);
+			        response.put("address", address);
+			        response.put("x", model.getAttribute("x"));
+			        response.put("y", model.getAttribute("y"));
+
+			        return new ResponseEntity<>(response, HttpStatus.OK);
+		        }
+		        
+		        //연관검색어 동으로 검색할떄 !! 
+		        
 		        
 		        if (tableName == null) {	// 검색 결과가 업종명이 아닌경우
 		        	district = sangkwondata.getDistrict(searchString.replace(" ", ""));	// 검색결과가 자치구인지 비교
@@ -364,8 +412,7 @@ public class SangkwonController {
 
 		        }
 		    }
-
-		 
+ 
 	//연관 검색어
 		 @GetMapping("/related_keywords.do")
 		 @ResponseBody
@@ -376,7 +423,7 @@ public class SangkwonController {
 		     List <String>list=searchService.getCatelist();
 		     Map<Object,Object>  autoCompleteSuggestions;
 		     // LinkedHashMap을 사용  맵의 순서가 삽인된 순서로 보장 된다.(LinkedHashMap을 쓰면)
-
+             
 		         if ( searchString.equals("서울") || searchString.equals("서울시")|| searchString.equals("서울특별시")|| searchString.equals("서")) {
 		        	 // ||는 or 연산자 &&는 and연산자  
 		        	 if(searchString.equals("서")) {
@@ -388,7 +435,6 @@ public class SangkwonController {
 		        		 List<String> autoCompleteSuggestionslist = searchService.getAutoCompleteSuggestions(searchString);
 		        		 Map<String, Object> suggestion;
 		        	 
-			             
 		        	     for(String district : autoCompleteSuggestionslist) {
 			            	 suggestion = new HashMap<>();
 			            	 int count = searchService.getStoreAddressCount(district);    
@@ -412,7 +458,7 @@ public class SangkwonController {
 		            	 autoCompleteSuggestions12.put(district, suggestion);
 		                 }
 		                  suggestionsMap.put("autoCompleteSuggestions12", autoCompleteSuggestions12);
-		                 }
+		            }
 
                 } else {
                 	suggestionsMap = new HashMap<>();
@@ -425,37 +471,38 @@ public class SangkwonController {
 		        	 if(! suggestionsMap.containsKey("cateSuggestions")) {
 		        		 Map<String, Map<String, String>> brandSuggestions = searchService.getAutoCompleteBrandSuggestions(searchString);
 		        		 suggestionsMap.put("brandSuggestions", brandSuggestions);
-		        	 }	 
+		        	 }
 		        	 
-		        	 if(! suggestionsMap.containsKey("cateSuggestions")&&  searchString.length() >= 2) {
-		        		 if(!(searchString.contains("구"))) {
-		        		Map<String,Object>DBTD= searchService.getStoreNameByAddress(searchString);
-		        	    suggestionsMap.put("DBTD", DBTD);	    
-		        	          Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
-		        		      List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
-			                   for(String district : autoCompleteSuggestions1) {
-			            	    Map<String, Object> suggestion = new HashMap<>();
-			            	   int count = searchService.getStoreAddressCount(district);    
-			            	    suggestion.put("distric",district);
-			            	   suggestion.put("count",count);
-			                     //	 System.out.println(suggestion);
-			            	    autoCompleteSuggestions2.put(district, suggestion);
-			                    }
-			         	      suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
-		        	       } 
-		        		 else {
-			        			 suggestionsMap = new HashMap<>();
-			            		 Map<String,Integer>CityData=searchService.getNeighborhoodByCityname(searchString);
-					                suggestionsMap.put("CityData", CityData);
-				     }	       
-		        	 }
-		        	
-
-		        	 }
 		  
+		        			        	 
+		        	 if(! suggestionsMap.containsKey("cateSuggestions")  && (searchService.checkcitynameSuggestionsgulist(searchString) || searchService.checkcitySuggestionsgulist(searchString))) {   		 
+		        		
+		        		 if(searchService.checkcitySuggestionsgulist(searchString)) {
+		        			 suggestionsMap = new HashMap<>();
+		            		 Map<String,Integer>CityData=searchService.getNeighborhoodByCityname(searchString);
+				                suggestionsMap.put("CityData", CityData);
+		        		 }
+		        		 else if(searchService.checkcitynameSuggestionsgulist(searchString)) {
+		        			 Map<String,Object>DBTD= searchService.getStoreNameByAddress(searchString);
+				        	    suggestionsMap.put("DBTD", DBTD);	    
+				        	    Map<String, Object> suggestion;
+				        	          Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
+				        		      List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
+					                   for(String district : autoCompleteSuggestions1) {
+					              suggestion = new HashMap<>();
+					            	   int count = searchService.getStoreAddressCount(district);    
+					            	    suggestion.put("distric",district);
+					            	   suggestion.put("count",count);
+					                     //	 System.out.println(suggestion);
+					            	    autoCompleteSuggestions2.put(district, suggestion);
+					                    }
+					         	      suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
+				        	 }  	 
+		        		 }
+		 
+		        }
 		     return new ResponseEntity<>(suggestionsMap, HttpStatus.OK);
 		 }
-		 
 		 
 		 @GetMapping("/SelectRegion.do")
 		 @ResponseBody

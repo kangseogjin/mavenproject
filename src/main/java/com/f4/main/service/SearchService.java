@@ -107,7 +107,7 @@ public class SearchService {
 	    parameters.put("tableNames", tableNames);
 	    parameters.put("storeAddress",storeAddress);
            
-	    System.out.println(storeAddress);
+	//    System.out.println(storeAddress);
 	      // < --쿼리문-->
            List<String> city = sqlSession.selectList("getNeighborhoodByCityname", parameters);
            //< --쿼리문-->
@@ -115,7 +115,7 @@ public class SearchService {
       //  System.out.println(city);
            Map<String,Integer> uniquecitydata=new HashMap<String, Integer>();
           for(String cityname : city) {
-      System.out.println(cityname);
+    //  System.out.println(cityname);
       
             uniquecitydata.put(cityname, uniquecitydata.getOrDefault(cityname, 0) + 1);
             // getOrDefalut는 해당 map의 키의 값이  없으면  반환값을 지정해주는 메서드로 매개변수 첫번쨰는
@@ -250,7 +250,7 @@ public class SearchService {
         return  suggestions;
     }
     
-    //구만 추출한 리스트
+    //서을특별시를 뺴고 서울특별시의 구가 들어간것만 추출한 리스트
     public List getDistrictsuggestionsgulist() {	  
      List<String> gulist=new ArrayList<String>();
     for(String gu : suggestions) {
@@ -264,7 +264,53 @@ public class SearchService {
         return  gulist;
     }
     
-    //브랜드명만  추출
+    //구의 이름만 추출한 리스트에서 searchString이 리스트에 해당되는지 체크하는 메서드
+    public Boolean checkcitynameSuggestionsgulist(String storeaddres) {
+    	 List<String> gulist=new ArrayList<String>();
+    	    for(String gu : suggestions) {
+    	    		if(gu.startsWith("서울특별시 ")) {
+    	    			//공백이 중요하다 공백도 문자로 취급하기에 서울특별시[공백] 라는 문자열이 된다. 	
+    	    			  String[] parts = gu.split("\\s+", 2);  //spilt는 문자열을 분리하는 메서드로 첫번쨰 변수는 어떤 기준으로를 말하고
+    	    			  //2번쨰 매개변수는 그 기준에 최대 반복되는 개수를 말한다.
+    	    			  String cityname=parts[1].replace("구", ""); //replace 메서드는 첫번쨰 매개변수는 해당 문자를 말하고
+    	    			  //두번쨰 매개변수는 첫번째 매개변수를 어떻게 바꿔야 할지 값을 정한다.
+    	    	            gulist.add(cityname); // 분리할떄 []이런식으로 인덱스로 분리를하기에 0부터 시작이된다.
+    	    	       }
+    	    	}
+    	   // System.out.println(gulist);
+    	    
+    	      for(String cityname : gulist) {
+    	    	//  System.out.println(storeaddres);
+    	    	 // System.out.println(cityname);
+    	        if(cityname.equals(storeaddres)) {
+    	        //	System.out.println("체크 됨"+storeaddres);
+    		      return true;
+    	         }
+    	       }
+    	   return false;
+    }
+
+    //구를 추출한 리스트에서 searchString이 리스트에 해당되는지 체크하는 메서드
+    public Boolean checkcitySuggestionsgulist(String storeaddres) {
+    	 List<String> gulist=new ArrayList<String>();
+    	    for(String gu : suggestions) {
+    	    		if(gu.startsWith("서울특별시 ")) {
+    	    			//공백이 중요하다 공백도 문자로 취급하기에 서울특별시[공백] 라는 문자열이 된다. 	
+    	    			  String[] parts = gu.split("\\s+", 2);  //spilt는 문자열을 분리하는 메서드로 첫번쨰 변수는 어떤 기준으로를 말하고
+    	    			  //2번쨰 매개변수는 그 기준에 최대 반복되는 개수를 말한다.  
+    	    	            gulist.add(parts[1]); // 분리할떄 []이런식으로 인덱스로 분리를하기에 0부터 시작이된다.
+    	    	            //System.out.println(gulist);
+    	    	       }
+    	    	}
+    	      for(String cityname : gulist) {
+    	        if(cityname.equals(storeaddres)) {
+    		      return true;
+    	         }
+    	       }
+    	   return false;
+    }
+    
+	//브랜드명만  추출
     public String extractBrandName(String storeName) {
     	
 	    if (storeName == null) {

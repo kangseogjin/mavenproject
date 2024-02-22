@@ -3004,7 +3004,7 @@ document.getElementById('searchString').addEventListener('input', function() {
                        		  var imageUrl=brandData.imageUrl;
                        		  var brandname=brandData.brandname;
                        		  var findcate=brandData.findcate;	
-                                 html += '<button type="button" class="css-6iux0g" data-search-string="' + brandname+ '"  onclick="RealtionSearchButtonClick(event)" id="list">';
+                                 html += '<button type="button" class="css-6iux0g" data-search-string="' + brandname+ '"  onclick="RealtionSearchButtonClick(event)">';
                                  html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
                                  html += ' <p class="css-13gn9e4">';
                                  html += '  <span class="css-1iet6e5">' + brandname + '</span>';
@@ -3049,24 +3049,21 @@ document.getElementById('searchString').addEventListener('input', function() {
     	         }
     	     }
      }
-     else if(response && response.CityData && Object.keys(response.CityData).length > 0){
-    	 
+     else if(response && response.CityData && Object.keys(response.CityData).length > 0){    	 
     	 for(var cityname in response.CityData) {
              if (response.CityData.hasOwnProperty(cityname)) {
              	 var count = response.CityData[cityname];
-          
                  html += '<button type="button" class="css-6iux0g"  data-search-string="' + cityname + '" onclick="RealtionSearchButtonClick(event)">';
                  html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
                  html += ' <p class="css-13gn9e4">';
                  html += '  <span class="css-1iet6e5">' + cityname + '</span>';
                  html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
                  html += '</p>';
-                 html += '</button>';
-    	         
-         }
-     }
-     }
-                     
+                 html += '</button>';    
+           }
+        }
+ 
+     }                    
      else {
             	  html = '<p class="css-1czv3nb" style="font-weight: bold ; margin-left: 30px;  margin-top:100px;">해당 관련 검색어가 없습니다!</p>';        
                   html += '<div class="css-yz1nei" style="margin-top: 30px; margin-left: 110px;">';
@@ -3515,7 +3512,7 @@ $(document).ready(function() {
 <!-- 검색을 했을경우 사용하는 div -->
 <div id="searchengine" class="css-xu6rln" style="display: none;">      
 <div aria-label="grid" aria-readonly="true" class="ReactVirtualized__Grid ReactVirtualized__List" role="grid" tabindex="0" style="box-sizing: border-box; direction: ltr; height: 600px; position: relative; width: 360px; will-change: transform; overflow: auto;">
-		<div class="ReactVirtualized__Grid__innerScrollContainer" role="rowgroup" style="width: 340px; height: auto; max-width: 360px; max-height: 10000px; overflow: hidden; position: relative;">
+		<div class="ReactVirtualized__Grid__innerScrollContainer" role="rowgroup" style="width: 340px; height: 7000px; max-width: 360px; max-height: 90000px; overflow: hidden; position: relative;">
 		
 		 <!-- button -->
 	        <button type="button" class="css-bbjmfd" style="position: relative;">

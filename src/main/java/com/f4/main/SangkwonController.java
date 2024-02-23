@@ -423,7 +423,6 @@ public class SangkwonController {
 		     List <String>list=searchService.getCatelist();
 		     Map<Object,Object>  autoCompleteSuggestions;
 		     // LinkedHashMap을 사용  맵의 순서가 삽인된 순서로 보장 된다.(LinkedHashMap을 쓰면)
-             
 		         if ( searchString.equals("서울") || searchString.equals("서울시")|| searchString.equals("서울특별시")|| searchString.equals("서")) {
 		        	 // ||는 or 연산자 &&는 and연산자  
 		        	 if(searchString.equals("서")) {
@@ -439,13 +438,12 @@ public class SangkwonController {
 			            	 suggestion = new HashMap<>();
 			            	 int count = searchService.getStoreAddressCount(district);    
 			            	 suggestion.put("distric",district);
-			            	 suggestion.put("count",count);
-			          //  	 System.out.println(suggestion);
+			            	 suggestion.put("count",count);		  
 			            	 autoCompleteSuggestions.put(district, suggestion);
 			             }
 			             suggestionsMap.put("autoCompleteSuggestions", autoCompleteSuggestions);
 		          }  
-		        	 else {  
+		        	 else {   //서가 아닐떄 (서울,서울특별시일 때) 처리
 		        	  List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);
 		        	  suggestionsMap = new HashMap<>();
 		        	   Map<Object,Object> autoCompleteSuggestions12= new LinkedHashMap<>(); 
@@ -453,8 +451,7 @@ public class SangkwonController {
 		            	 Map<String, Object> suggestion = new HashMap<>();
 		            	 int count = searchService.getStoreAddressCount(district);    
 		            	 suggestion.put("distric",district);
-		            	 suggestion.put("count",count);
-		          //  	 System.out.println(suggestion);
+		            	 suggestion.put("count",count);	      
 		            	 autoCompleteSuggestions12.put(district, suggestion);
 		                 }
 		                  suggestionsMap.put("autoCompleteSuggestions12", autoCompleteSuggestions12);
@@ -463,41 +460,61 @@ public class SangkwonController {
                 } else {
                 	suggestionsMap = new HashMap<>();
 		        	 for(String cate : list) {
-		        		 if(cate.equals(searchString)) {   		
+		        		 if(cate.equals(searchString)) {   		//카테고리로 처리 할 때
 		        			 Map<String, Map<String, Map<String,String>>> cateSuggestions = searchService.getAutoCompleteCateSuggestions(searchString);
 		        		     suggestionsMap.put("cateSuggestions", cateSuggestions);
 		        		 }
 		        	 }		        	 
-		        	 if(! suggestionsMap.containsKey("cateSuggestions")) {
+		        		 if(! suggestionsMap.containsKey("cateSuggestions")) {  //브랜드로 처리 할 때
 		        		 Map<String, Map<String, String>> brandSuggestions = searchService.getAutoCompleteBrandSuggestions(searchString);
 		        		 suggestionsMap.put("brandSuggestions", brandSuggestions);
 		        	 }
-		        	 
-		  
-		        			        	 
-		        	 if(! suggestionsMap.containsKey("cateSuggestions")  && (searchService.checkcitynameSuggestionsgulist(searchString) || searchService.checkcitySuggestionsgulist(searchString))) {   		 
-		        		
-		        		 if(searchService.checkcitySuggestionsgulist(searchString)) {
+		         	 
+		        	  if(! suggestionsMap.containsKey("cateSuggestions")  && 
+		        			  (searchService.checkcitynameSuggestionsgulist(searchString) || searchService.checkcitySuggestionsgulist(searchString)
+		        			 || searchService.checkbyNBN(searchString) 
+		        			 || searchService.checkNeighborhood(searchString))) {   		 		
+		        		 
+		        		  if(searchService.checkcitySuggestionsgulist(searchString)) { //구로 처리할 때
 		        			 suggestionsMap = new HashMap<>();
 		            		 Map<String,Integer>CityData=searchService.getNeighborhoodByCityname(searchString);
 				                suggestionsMap.put("CityData", CityData);
 		        		 }
-		        		 else if(searchService.checkcitynameSuggestionsgulist(searchString)) {
+		        		  else if(searchService.checkcitynameSuggestionsgulist(searchString)) {  //구의 이름으로 처리할때 
 		        			 Map<String,Object>DBTD= searchService.getStoreNameByAddress(searchString);
 				        	    suggestionsMap.put("DBTD", DBTD);	    
 				        	    Map<String, Object> suggestion;
 				        	          Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
 				        		      List<String> autoCompleteSuggestions1 = searchService.getAutoCompleteSuggestions(searchString);			
 					                   for(String district : autoCompleteSuggestions1) {
-					              suggestion = new HashMap<>();
+					                    suggestion = new HashMap<>();
 					            	   int count = searchService.getStoreAddressCount(district);    
 					            	    suggestion.put("distric",district);
 					            	   suggestion.put("count",count);
 					                     //	 System.out.println(suggestion);
 					            	    autoCompleteSuggestions2.put(district, suggestion);
 					                    }
+					                   
 					         	      suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
-				        	 }  	 
+				        	 } else if(searchService.checkbyNBN(searchString)) {
+				        		  Map<String, Object>  suggestion = new HashMap<>();
+				        		  Map<Object,Object>  autoCompleteSuggestions2= new LinkedHashMap<>(); 
+				        		  Map<String, Integer>Neighborhoodbranddata=searchService.getNBDDSuggestions(searchString);
+				        		 String district = Neighborhoodbranddata.keySet().iterator().next();
+				        		 Integer count =Neighborhoodbranddata.get(district);
+				        		    suggestion.put("distric",district);
+					            	suggestion.put("count",count);
+				        		   autoCompleteSuggestions2.put(district, suggestion);		      	   
+				        		   suggestionsMap.put("autoCompleteSuggestions2", autoCompleteSuggestions2);
+				        			// 맵에 키가 하나뿐이라면 KEYSET.ITERATOR.NEXT를 사용해 키값을 가져올수 있다.
+				        		 Map<String,Object>DBTD= searchService.getStoreNameByAddress(district);
+					        	    suggestionsMap.put("DBTD", DBTD);	     
+				        	 }else if(searchService.checkNeighborhood(searchString)) {	 
+				        			 suggestionsMap = new HashMap<>();
+				            		 Map<String,Integer>CityData=searchService.getNBDDSuggestions(searchString);
+						                suggestionsMap.put("Neighborhood", CityData);
+				        	 }
+		        		
 		        		 }
 		 
 		        }

@@ -34,9 +34,23 @@
     WHERE storeAddress LIKE '%' || #{storeAddress} || '%'
   </foreach>
 </select>
+
 <!-- 연관 검색어  -->
-	
-	
+<select id="getNeighborhoodByNeighborhood" resultType="string" parameterType="Map">
+  <foreach collection="tableNames" item="tableName" separator=" UNION ALL">  
+    SELECT SUBSTR(storeAddress, 1, length(storeAddress)) 
+    FROM ${tableName}
+    WHERE SUBSTR(storeAddress, INSTR(storeAddress, ' ', 1, 2) + 1, INSTR(storeAddress, ' ', 1, 3) - INSTR(storeAddress, ' ', 1, 2) - 1) LIKE '%' || #{storeAddress} || '%'
+  <!--  조건절에서 substr을 쓸수 있다.  위의 구문에서 2번째 매개변수는 추출할 문자의 시작점 즉 2번째 공백이후를 가르키고  3번쨰 매개변수는 
+  추출할 문자의 길이를 가르키기 떄문에 3번째 공백까지의 위치에서 2번쨰 공백까지의 위치를 빼면 2번쨰에서 3번쨰사이의 길이가 나오고 
+  -1을 하면 남은 부분의 공백을 제거한다. -->
+  </foreach>
+</select>
+
+
+
+
+
 
 <!-- 연관 검색어  -->
 	<select id="getStoreNameByAddress" resultType="string" parameterType="Map">

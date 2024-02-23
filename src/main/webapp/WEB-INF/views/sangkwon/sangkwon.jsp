@@ -2880,7 +2880,6 @@ function deleteRecord(keyword) {
 }
 
 
-
 function updateSearchHistoryOnServer(searchString) {
     // 서버에 Ajax 요청을 보냄
     $.ajax({
@@ -2909,12 +2908,15 @@ document.querySelector('.css-i5sibr').addEventListener('click', function () {
 
 
 //연관검색어 및 검색어 자동완성
+var timer;
 document.getElementById('searchString').addEventListener('input', function() {
     var searchString = this.value.trim();
     if (searchString.length >= 1) {
         document.querySelector('.css-gflgma').classList.remove('active');
-
-        $.ajax({
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+        // 서버의 응답을  타이머를 정하는 메서드 (이걸 이용하면 꼬이는게 덜하다)
+        	$.ajax({
             type: "GET",
             url: "related_keywords.do",
             data: { searchString: searchString },
@@ -2935,10 +2937,7 @@ document.getElementById('searchString').addEventListener('input', function() {
                              html += '</button>';	         
                          }
                      }
-                
-                 }
-                
-                
+                 }    
                 else if (response && response.brandSuggestions && Object.keys(response.brandSuggestions).length > 0) {
                     for (var suggestion in response.brandSuggestions) {
                         if (response.brandSuggestions.hasOwnProperty(suggestion)) {
@@ -2958,24 +2957,24 @@ document.getElementById('searchString').addEventListener('input', function() {
                     for (var suggestion in response.cateSuggestions) {
                         if (response.cateSuggestions.hasOwnProperty(suggestion)) {
                           var brandinfo=response.cateSuggestions[suggestion];
-          for(var brandname in brandinfo){
-        	  if(brandinfo.hasOwnProperty(brandname)){
-        		  var brandData=brandinfo[brandname];
-        		  var imageUrl=brandData.imageUrl;
-        		  var brandname=brandData.brandname;
-        		  var findcate=brandData.findcate;
-                  html += '<button type="button" class="css-6iux0g" data-search-string="' + brandname+ '" onclick="RealtionSearchButtonClick(event)">';
-                  html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
-                  html += ' <p class="css-13gn9e4">';
-                  html += '  <span class="css-1iet6e5">' + brandname + '</span>';
-                  html +=' <span class="css-1kn92c3">'+ findcate +'</span>';
-                  html += '</p>';
-                  html += '</button>';	  
-        	   }
-        	 }
-          } 
-        }
-              
+                 for(var brandname in brandinfo){
+        	              if(brandinfo.hasOwnProperty(brandname)){
+        		          var brandData=brandinfo[brandname];
+        		          var imageUrl=brandData.imageUrl;
+        		          var brandname=brandData.brandname;
+        		          var findcate=brandData.findcate;
+                             html += '<button type="button" class="css-6iux0g" data-search-string="' + brandname+ '" onclick="RealtionSearchButtonClick(event)">';
+                             html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
+                             html += ' <p class="css-13gn9e4">';
+                             html += '  <span class="css-1iet6e5">' + brandname + '</span>';
+                             html +=' <span class="css-1kn92c3">'+ findcate +'</span>';
+                             html += '</p>';
+                              html += '</button>';	  
+        	              }
+        	            }
+                      } 
+                   } 
+                    
      }else if(response && response.autoCompleteSuggestions2 && Object.keys(response.autoCompleteSuggestions2).length > 0 && response.DBTD && Object.keys(response.DBTD).length > 0){
 
     	 for(var district in response.autoCompleteSuggestions2) {
@@ -3014,42 +3013,8 @@ document.getElementById('searchString').addEventListener('input', function() {
              }
            } 
          }
-      }                    
-     }else if((response && response.brandSuggestions1 && Object.keys(response.brandSuggestions1).length > 0) ||  (response && response.autoCompleteSuggestions && Object.keys(response.autoCompleteSuggestions).length > 0)){
-    
-    	   for (var suggestion in response.brandSuggestions1) {
-               if (response.brandSuggestions1.hasOwnProperty(suggestion)) {
-                 var brandinfo=response.brandSuggestions1[suggestion];
-               	var imageUrl = brandinfo.imageUrl;
-                   var cateSuggestion = brandinfo.findcate;
-                   html += '<button type="button" class="css-6iux0g" data-search-string="' + suggestion + '" onclick="RealtionSearchButtonClick(event)">';
-                   html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
-                   html += ' <p class="css-13gn9e4">';
-                   html += '  <span class="css-1iet6e5">' + suggestion + '</span>';
-                   html +=' <span class="css-1kn92c3">'+ cateSuggestion +'</span>';
-                   html += '</p>';
-                   html += '</button>';
-               }
-           }
-    	         html +='<div class="css-pkdumz"></div>';
-    	
-    	         for(var district in response.autoCompleteSuggestions) {
-    	             if (response.autoCompleteSuggestions.hasOwnProperty(district)) {
-    	             	 var suggestion = response.autoCompleteSuggestions[district];
-    	                  var count = suggestion.count;
-    	                  var districtName = suggestion.distric;
-    	                 html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
-    	                 html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
-    	                 html += ' <p class="css-13gn9e4">';
-    	                 html += '  <span class="css-1iet6e5">' + districtName + '</span>';
-    	                 html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
-    	                 html += '</p>';
-    	                 html += '</button>';
-    	    	         
-    	         }
-    	     }
-     }
-     else if(response && response.CityData && Object.keys(response.CityData).length > 0){    	 
+      }
+     } else if(response && response.CityData && Object.keys(response.CityData).length > 0){    	 
     	 for(var cityname in response.CityData) {
              if (response.CityData.hasOwnProperty(cityname)) {
              	 var count = response.CityData[cityname];
@@ -3062,13 +3027,60 @@ document.getElementById('searchString').addEventListener('input', function() {
                  html += '</button>';    
            }
         }
- 
-     }                    
+     }else if((response && response.brandSuggestions1 && Object.keys(response.brandSuggestions1).length > 0) ||  (response && response.autoCompleteSuggestions && Object.keys(response.autoCompleteSuggestions).length > 0)){
+    	    
+  	   for (var suggestion in response.brandSuggestions1) {
+             if (response.brandSuggestions1.hasOwnProperty(suggestion)) {
+               var brandinfo=response.brandSuggestions1[suggestion];
+             	var imageUrl = brandinfo.imageUrl;
+                 var cateSuggestion = brandinfo.findcate;
+                 html += '<button type="button" class="css-6iux0g" data-search-string="' + suggestion + '" onclick="RealtionSearchButtonClick(event)">';
+                 html += '  <img src="' + imageUrl + '" class="css-ryc40a" alt="프랜차이즈 로고">';
+                 html += ' <p class="css-13gn9e4">';
+                 html += '  <span class="css-1iet6e5">' + suggestion + '</span>';
+                 html +=' <span class="css-1kn92c3">'+ cateSuggestion +'</span>';
+                 html += '</p>';
+                 html += '</button>';
+             }
+         }
+  	         html +='<div class="css-pkdumz"></div>';
+  	
+  	         for(var district in response.autoCompleteSuggestions) {
+  	             if (response.autoCompleteSuggestions.hasOwnProperty(district)) {
+  	             	 var suggestion = response.autoCompleteSuggestions[district];
+  	                  var count = suggestion.count;
+  	                  var districtName = suggestion.distric;
+  	                 html += '<button type="button" class="css-6iux0g"  data-search-string="' + districtName + '" onclick="RealtionSearchButtonClick(event)">';
+  	                 html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
+  	                 html += ' <p class="css-13gn9e4">';
+  	                 html += '  <span class="css-1iet6e5">' + districtName + '</span>';
+  	                 html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
+  	                 html += '</p>';
+  	                 html += '</button>';
+  	    	         
+  	         }
+  	     } 
+   } else if(response && response. Neighborhood && Object.keys(response. Neighborhood).length > 0){    	 
+	   var suggestionList = document.querySelector('.css-gflgma1');
+	   suggestionList.style.width = '370px'; // 너비를 3700px로 설정
+	   for(var Nbh in response. Neighborhood) {
+         if (response.Neighborhood.hasOwnProperty(Nbh)) {
+         	 var count = response.Neighborhood[Nbh];
+             html += '<button type="button" class="css-6iux0g"  data-search-string="' + Nbh + '" onclick="RealtionSearchButtonClick(event)">';
+             html += '  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+aWNvbi8yNC9zZWFyY2gvbG9jYXRpb248L3RpdGxlPgogICAgPGcgaWQ9Imljb24vMjQvc2VhcmNoL2xvY2F0aW9uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0i7KeA7JetIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0Y1RjVGNSIgeD0iMCIgeT0iMCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iOCI+PC9yZWN0PgogICAgICAgICAgICA8cGF0aCBkPSJNMTIuMTk0NDQ0NCw2IEMxNC43ODcxMTQ1LDYgMTYuODg4ODg4OSw4LjEyOTI0NjgyIDE2Ljg4ODg4ODksMTAuNzU1ODA1OSBDMTYuODg4ODg4OSwxNC4zMzkyMTE4IDEyLjE5NDQ0NDQsMTkgMTIuMTk0NDQ0NCwxOSBDMTIuMTk0NDQ0NCwxOSA3LjUsMTQuMzcyMTU3MiA3LjUsMTAuNzU1ODA1OSBDNy41LDguMTI5MjQ2ODIgOS42MDE3NzQzNyw2IDEyLjE5NDQ0NDQsNiBaIE0xMi4xOTQ0NDQ0LDguNTI3Nzc3NzggQzEwLjk5NzgyNzUsOC41Mjc3Nzc3OCAxMC4wMjc3Nzc4LDkuNDk3ODI3NDkgMTAuMDI3Nzc3OCwxMC42OTQ0NDQ0IEMxMC4wMjc3Nzc4LDExLjg5MTA2MTQgMTAuOTk3ODI3NSwxMi44NjExMTExIDEyLjE5NDQ0NDQsMTIuODYxMTExMSBDMTMuMzkxMDYxNCwxMi44NjExMTExIDE0LjM2MTExMTEsMTEuODkxMDYxNCAxNC4zNjExMTExLDEwLjY5NDQ0NDQgQzE0LjM2MTExMTEsOS40OTc4Mjc0OSAxMy4zOTEwNjE0LDguNTI3Nzc3NzggMTIuMTk0NDQ0NCw4LjUyNzc3Nzc4IFoiIGlkPSJDb21iaW5lZC1TaGFwZSIgZmlsbD0iIzAwNzA3OCI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+" class="css-ryc40a" alt="프랜차이즈 로고">';
+             html += ' <p class="css-13gn9e4">';
+             html += '  <span class="css-1iet6e5">' + Nbh + '</span>';
+             html +=' <span class="css-1kn92c3">' + "매장 개수: " + count + "개" + '</span>';
+             html += '</p>';
+             html += '</button>';    
+       }
+    }
+	   
+ }
      else {
             	  html = '<p class="css-1czv3nb" style="font-weight: bold ; margin-left: 30px;  margin-top:100px;">해당 관련 검색어가 없습니다!</p>';        
                   html += '<div class="css-yz1nei" style="margin-top: 30px; margin-left: 110px;">';
-            	  html+= '<span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"><span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px;  padding: 0px; max-width: 100%;">';
-            
+            	  html+= '<span style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"><span style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px;  padding: 0px; max-width: 100%;">';   
                 }
                 $("#realtionsearchlist").html(html);
              console.log("Related keywords:", response);
@@ -3082,30 +3094,13 @@ document.getElementById('searchString').addEventListener('input', function() {
         });
         
         document.querySelector('.css-gflgma1').classList.add('active');
-    } else { 
+        },1000); // 1초 지연   
+        } 
+        else { 
         document.querySelector('.css-gflgma').classList.add('active');
         document.querySelector('.css-gflgma1').classList.remove('active');
-    }
-});
-
-//초기값 설정
-var currentItems = 5; // 처음에는 5개의 아이템을 보여줍니다.
-var itemsToShow = 5; // 더보기를 클릭할 때마다 5개씩 추가로 보여줍니다.
-
-//"더 보기" 버튼에 클릭 이벤트 핸들러 연결
-$('#css-real2').on('click', function() {
-    // 이전에 보여준 데이터의 개수를 저장합니다.
-    var prevItems = currentItems;
-
-    // 추가로 보여줄 데이터의 개수를 계산합니다.
-    currentItems += itemsToShow;
-
-    // 보여줄 데이터의 개수에 따라서 목록을 업데이트합니다.
-    $('#list').slice(prevItems, currentItems).show();
-
-    // 만약 더 이상 추가로 보여줄 데이터가 없다면 "더 보기" 버튼을 숨깁니다.
-    if (currentItems >= $('#list').length) {
-        $('#css-real2').hide();
+        var suggestionList = document.querySelector('.css-gflgma1');
+        suggestionList.style.width = ''; // 너비 설정 제거
     }
 });
 
@@ -3133,10 +3128,6 @@ function RealtionSearchButtonClick(event) {
 	
 
 
-
-
-
-
 function handleButtonClick(event) {
     event.preventDefault(); // 기본 동작 방지
     var searchString = $(event.currentTarget).data('search-string').trim();
@@ -3148,8 +3139,6 @@ function handleButtonClick(event) {
 
 }
 	
-
-
 function handleKeyDown(event) {
     if (event.key === 'Enter') {
     	  var searchString = $("#searchString").val(); 

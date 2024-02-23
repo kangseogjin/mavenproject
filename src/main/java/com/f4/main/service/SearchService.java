@@ -101,17 +101,14 @@ public class SearchService {
   //해당 주소의 동까지 추출
     public Map<String,Integer> getNeighborhoodByCityname(String storeAddress){
     	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
-
 	    Map<String, Object> parameters = new HashMap<>();
 	    Set<String> uniquecity =new HashSet<String>();
 	    parameters.put("tableNames", tableNames);
 	    parameters.put("storeAddress",storeAddress);
-           
 	//    System.out.println(storeAddress);
 	      // < --쿼리문-->
            List<String> city = sqlSession.selectList("getNeighborhoodByCityname", parameters);
            //< --쿼리문-->
-           
       //  System.out.println(city);
            Map<String,Integer> uniquecitydata=new HashMap<String, Integer>();
           for(String cityname : city) {
@@ -155,8 +152,7 @@ public class SearchService {
             for (Integer count : counts) {
                 totalCount += count;
             }
-        }
-        
+        }   
         return totalCount;
     }
 
@@ -171,6 +167,46 @@ public class SearchService {
         }
         return autoCompleteSuggestions;
     }
+    
+    //동의 이름으로 받을때 해당 동의 관련 번지들을 해당 동으로 변환후 번지들의 갯수와 해당 동으로 반환
+    public Map<String,Integer>getNBDDSuggestions(String storeAddress) {
+     	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
+	    Map<String, Object> parameters = new HashMap<>();
+	    Set<String> uniquecity =new HashSet<String>();
+	    parameters.put("tableNames", tableNames);
+	    parameters.put("storeAddress",storeAddress);
+	    
+           List<String> dong = sqlSession.selectList("getNeighborhoodByNeighborhood", parameters);     
+           List<String> neighborhoodnamelist =new ArrayList<String>();
+    	 List<String> donglist=new ArrayList<String>();
+    	 if(checkbyNBN(storeAddress)) {
+    		  for(String dongname : dong) {
+    	    		 // System.out.println(dongname);
+    	    		  String[] parts = dongname.split("\\s+", 5);
+    	    		  if(parts[2].endsWith("가")) {
+    	    			  parts[2]=parts[2].replaceAll("\\d+가", ""); //replace는 한개를 받고 
+    	    			  // replaceall은 한개이상받을떄 쓰인다.
+    	    			  // \\d는 모든숫자를 표현한 정규식이고 +은 연속한다는뜻으로 한개 이상이라는 표현이다.
+    	    			  neighborhoodnamelist.add(parts[0]+" "+parts[1]+" "+parts[2]);
+    	    			 // System.out.println(neighborhoodnamelist);
+    	    		  }else {
+    	    			  neighborhoodnamelist.add(parts[0]+" "+parts[1]+" "+parts[2]);
+    	    		  }
+    	    	    	} 
+    	 }else if(checkNeighborhood(storeAddress)) {
+    		  for(String dongname : dong) {
+ 	    		 // System.out.println(dongname);
+ 	    		  String[] parts = dongname.split("\\s+", 5);
+ 	    		 neighborhoodnamelist.add(parts[0]+" "+parts[1]+" "+parts[2]+" "+parts[3]) ;
+    	      }
+    	 }
+    	  Map<String,Integer> uniqueneighborhooddata=new HashMap<String, Integer>();
+    	  for(String cityname : neighborhoodnamelist) {
+    		  uniqueneighborhooddata.put(cityname, uniqueneighborhooddata.getOrDefault(cityname, 0) + 1);
+    	  }
+    	  return uniqueneighborhooddata;
+    	   	}
+    	 
     
  // 브랜드 연관검색
     public Map<String, Map<String, String>> getAutoCompleteBrandSuggestions(String searchString) {
@@ -198,20 +234,18 @@ public class SearchService {
            
            for (String suggestion :  cate_suggestions) {
                if (suggestion.toLowerCase().equals(searchString.toLowerCase())) {
-
-            	//   System.out.println(list);	   
+            	    //   System.out.println(list);	   
             	   for(String brandname : list) {
             		   Map<String,String> brandData=new HashMap<>();
-            		//   System.out.println("list 값  "+brandname);
+            		    //   System.out.println("list 값  "+brandname);
             		   brandData.put("imageUrl", sangkwongData.image(brandname));
             		   brandData.put("findcate", find(brandname));
             		   brandData.put("brandname", brandname);
             	       brandInfo.put(brandname, brandData);
-            //	System.out.println(brandInfo);
-            	   }
+                         //	System.out.println(brandInfo);
+            	    }
             	   autoCompleteSuggestions.put(suggestion, brandInfo);     
-            	 //  System.out.println(autoCompleteSuggestions);
-            	    
+            	 //  System.out.println(autoCompleteSuggestions);      	    
                }
            }
            return autoCompleteSuggestions;
@@ -277,8 +311,7 @@ public class SearchService {
     	    	            gulist.add(cityname); // 분리할떄 []이런식으로 인덱스로 분리를하기에 0부터 시작이된다.
     	    	       }
     	    	}
-    	   // System.out.println(gulist);
-    	    
+    	   // System.out.println(gulist);  
     	      for(String cityname : gulist) {
     	    	//  System.out.println(storeaddres);
     	    	 // System.out.println(cityname);
@@ -310,13 +343,77 @@ public class SearchService {
     	   return false;
     }
     
+    //동의 이름만 추출한 리스트에서 searchString이 리스트에 해당되는지 체크하는 메서드
+    public Boolean checkbyNBN(String storeAddress) {
+     	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
+	    Map<String, Object> parameters = new HashMap<>();
+	    Set<String> uniquecity =new HashSet<String>();
+	    parameters.put("tableNames", tableNames);
+	    parameters.put("storeAddress",storeAddress);
+           List<String> dong = sqlSession.selectList("getNeighborhoodByNeighborhood", parameters);
+           //System.out.println(dong);
+           //< --쿼리문--> 
+    	 List<String> donglist=new ArrayList<String>();
+    	 List<String> neighborhoodnamelist =new ArrayList<String>();
+    	  for(String dongname : dong) {
+    		 // System.out.println(dongname);
+    		  String[] parts = dongname.split("\\s+",4);
+    	//System.out.println(neighborhoodname);
+    	    	 if(parts[2].endsWith("가")) {
+       			  parts[2]=parts[2].replaceAll("\\d+가", ""); //replace는 한개를 받고 
+       			  // replaceall은 한개이상받을떄 쓰인다.
+       			  parts[2]=parts[2].replace("동", "");
+       			  // \\d는 모든숫자를 표현한 정규식이고 +은 연속한다는뜻으로 한개 이상이라는 표현이다.
+       			  neighborhoodnamelist.add(parts[2]);
+    	   	}else if(parts[2].endsWith("동")) {
+    	   	  parts[2]=parts[2].replaceAll("동", "");
+    	   	 neighborhoodnamelist.add(parts[2]);
+    	   	}
+    	    	 for(String name : neighborhoodnamelist) {
+    	    		 if(name.equals(storeAddress)) {
+    	    			 //System.out.println("성공");
+    	    			 return true;
+    	    		 }else {
+    	    			 return false;
+    	    		 }
+    	    	 } 
+          }
+    	  return  false;
+    }
+    
+  //동으로 추출한 리스트에서 searchString이 리스트에 해당되는지 체크하는 메서드
+    public Boolean checkNeighborhood(String storeAddress) {
+     	List<String> tableNames = Arrays.asList("chicken", "pizza","fastFood","jokbal_Bossam","japanese", "chinese", "korean", "western", "snack", "pub", "asian", "dessert", "cafe");  
+	    Map<String, Object> parameters = new HashMap<>();
+	    Set<String> uniquecity =new HashSet<String>();
+	    parameters.put("tableNames", tableNames);
+	    parameters.put("storeAddress",storeAddress);
+           List<String> dong = sqlSession.selectList("getNeighborhoodByNeighborhood", parameters);
+           //System.out.println(dong);
+           //< --쿼리문-->
+    	 List<String> donglist=new ArrayList<String>();
+    	 List<String> neighborhoodnamelist =new ArrayList<String>();
+    	  for(String dongname : dong) {
+    		  String[] parts = dongname.split("\\s+",5);
+       			  neighborhoodnamelist.add(parts[2]);
+    	    	 for(String name : neighborhoodnamelist) {
+    	    		 if(name.equals(storeAddress)) {
+    	    			 //System.out.println("성공");
+    	    			 return true;
+    	    		 }else {
+    	    			 return false;
+    	    		 }
+    	    	 } 
+          }
+    	  return  false;
+    }
+     
 	//브랜드명만  추출
     public String extractBrandName(String storeName) {
     	
 	    if (storeName == null) {
 	        return ""; // 또는 다른 기본값을 지정
-	    } 
-	    
+	    }   
 	    Pattern lifebeerPattern = Pattern.compile("인쌩맥주|인생맥주|인생 맥주");
 	    Matcher lifebeerMatcher = lifebeerPattern.matcher(storeName);
 	    //BHC가  한글로 되어있는 데이터 구조가 있어서 처리해준다 BHC로 처리해준다
